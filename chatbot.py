@@ -8,15 +8,24 @@ import streamlit as st
 import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+import requests
 
 ssl._create_default_https_context = ssl._create_unverified_context
 nltk.data.path.append(os.path.abspath("nltk_data"))
 nltk.download('punkt')
 
 # Load intents from the JSON file
-file_path = os.path.abspath("./intents.json")
-with open(file_path, "r") as file:
-    intents = json.load(file)
+url = 'https://raw.githubusercontent.com/Sandeepkondu/chatbot/88b1e0328bdaf303aeb390b62587fbd93858447b/intents.json'
+
+# Fetch the file from GitHub
+response = requests.get(url)
+
+# Check if the request was successful
+if response.status_code == 200:
+    intents = response.json()  # Parse JSON data from the response  # You can use the intents in your chatbot logic
+else:
+    print('Failed to load JSON file')
+
 
 # Create the vectorizer and classifier
 vectorizer = TfidfVectorizer()
